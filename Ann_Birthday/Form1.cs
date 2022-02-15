@@ -13,6 +13,8 @@ using System.Net.Mail;
 using System.IO;
 using Outlook = Microsoft.Office.Interop.Outlook;
 using DGVPrinterHelper;
+using Tulpep.NotificationWindow;
+using Excel = Microsoft.Office.Interop.Excel;
 using System.Web.UI.WebControls;
 using Unipluss.Sign.ExternalContract.Entities;
 using static DGVPrinterHelper.DGVPrinter;
@@ -24,7 +26,7 @@ namespace Ann_Birthday
         NetworkCredential login;
         SmtpClient client;
         MailMessage msg;
-        String file_name="";
+        String file_name= @"D:\AGILE AND SCURM TRAINING\birthday_anniversary.xlsx";
         
         public Form1()
         {
@@ -82,13 +84,7 @@ namespace Ann_Birthday
 
                     }
                 }
-                //}
-                // using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "Excel Workbook|*.xlsx", Multiselect = false })
-                //{
-               /* if (ofd.ShowDialog() == DialogResult.OK)
-                {*/
 
-                    //Cursor.Current = Cursor.WaitCursor;
                     Cursor.Current = Cursors.WaitCursor;
                     DataTable dt1 = new DataTable();
                 
@@ -140,7 +136,7 @@ namespace Ann_Birthday
 
                         //dv.RowFilter = txtSearch.Text;
                         String date = dateTimePicker1.Text.Substring(0, 5);
-                        dv.RowFilter = "Birthday like'" + date + "%'";
+                        dv.RowFilter = "DOB like'" + date + "%'";
                         
                         if (((dataGridView1.RowCount) - 1)>0)
                         {
@@ -206,7 +202,7 @@ namespace Ann_Birthday
 
                         //dv.RowFilter = txtSearch.Text;
                         String date = dateTimePicker1.Text.Substring(0,5);
-                        dv.RowFilter = "Joiningdate like'" + date + "%'";
+                        dv.RowFilter = "DOJ like'" + date + "%'";
                         if (((dataGridView1.RowCount) - 1) > 0)
                         {
                             label12.Text = $"Total Records :{(dataGridView1.RowCount) - 1}";
@@ -289,11 +285,74 @@ namespace Ann_Birthday
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+           
+
+            Excel.Application xlApp = new Excel.Application();
+            Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"D:\AGILE AND SCURM TRAINING\birthday_anniversary.xlsx");
+            Excel._Worksheet xlWorksheet = (Excel._Worksheet)xlWorkbook.Sheets[1];
+            Excel.Range xlRange = xlWorksheet.UsedRange;
+            int rowCount = xlRange.SpecialCells(Excel.XlCellType.xlCellTypeVisible).Rows.Count;
+            int colCount = xlRange.Columns.Count;
+            DateTime aDate = DateTime.Now;
+            string sub_date = aDate.ToString("MM/dd/yyyy");
+            dateTimePicker1.Text = sub_date;
+            string system_date = sub_date.Substring(0, 5);
+            int birthday_count = 0;
+            int aniver_count = 0;
+            foreach (Excel.Range row in xlRange.SpecialCells(Excel.XlCellType.xlCellTypeVisible).Rows)
+            {
+
+                Excel.Range DIE = (Excel.Range)row.Cells[1, 1];
+                Excel.Range ANI = (Excel.Range)row.Cells[1, 2];
+
+                if ((DIE.Value2 != null) && (ANI.Value2 != null))
+                {
+                    string s = DIE.Text;
+                    string ani = ANI.Text;
+                    if (s == "DOB")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        string birthday_date = s.Substring(0, 5);
+                        string aniverary_day = ani.Substring(0, 5);
+                        if (system_date == birthday_date)
+                        {
+                            birthday_count += 1;
+                        }
+                        if (system_date == aniverary_day)
+                        {
+                            aniver_count += 1;
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            xlWorkbook.Close(false);
+            xlApp.Quit();
+
+            PopupNotifier popup = new PopupNotifier();
+            popup.TitleText = "Notification";
+            popup.ContentText = "Birthday - " + birthday_count.ToString() + " and Anniversary Day - "+ aniver_count.ToString();
+            popup.Popup();
+
+
+            label11.Text = @"C:\Users\KumarSu\OneDrive - Nordex SE\Pictures\birthday-wish.jpg";
             this.Location = new Point(0, 0);
             this.Size = Screen.PrimaryScreen.WorkingArea.Size;
             label14.BackColor = System.Drawing.Color.Transparent;
             label10.BackColor = System.Drawing.Color.Transparent;
-            linkLabel1.BackColor= System.Drawing.Color.Transparent;
+            linkLabel1.BackColor = System.Drawing.Color.Transparent;
             label1.BackColor = System.Drawing.Color.Transparent;
             label16.BackColor = System.Drawing.Color.Transparent;
             label15.BackColor = System.Drawing.Color.Transparent;
@@ -301,11 +360,59 @@ namespace Ann_Birthday
             label3.BackColor = System.Drawing.Color.Transparent;
             label5.BackColor = System.Drawing.Color.Transparent;
             label7.BackColor = System.Drawing.Color.Transparent;
-            comboBox_Font.SelectedItem = "cursive";
+            comboBox_Font.SelectedItem = "Monaco";
             comboBox_color.SelectedItem = "black";
             bodycontent_cb.SelectedItem = "Content 1";
             comboBox2.SelectedItem = "01";
+            Cursor.Current = Cursors.WaitCursor;
+            DataTable dt = new DataTable();
 
+            using (XLWorkbook workbook = new XLWorkbook(file_name))
+            {
+                bool isFirstRow = true;
+                var rows = workbook.Worksheet(1).RowsUsed();
+                foreach (var row in rows)
+                {
+                    if (isFirstRow)
+                    {
+                        foreach (IXLCell cell in row.Cells())
+                            dt.Columns.Add(cell.Value.ToString());
+                        isFirstRow = false;
+                    }
+                    else
+                    {
+                        dt.Rows.Add();
+                        int i = 0;
+                        foreach (IXLCell cell in row.Cells())
+                            dt.Rows[dt.Rows.Count - 1][i++] = cell.Value.ToString();
+
+
+                    }
+                }
+
+                dataGridView1.DataSource = dt.DefaultView;
+
+                label12.Text = $"Total Records :{(dataGridView1.RowCount) - 1}";
+                Cursor.Current = Cursors.Default;
+
+            }
+            
+
+
+            if(birthday_count>=1 || aniver_count >= 1)
+            {
+                DialogResult dialogResult = MessageBox.Show("You Want to send Wishes?", "Conformation", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    btnSearch.PerformClick();
+                    button2.PerformClick();
+                    this.Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show("No Wishes Today");
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -329,7 +436,7 @@ namespace Ann_Birthday
 
                 msg = new MailMessage { From = new MailAddress("suryafandasydream11@gmail.com", "Surya Kumar", Encoding.UTF8) };
                 msg.Subject = msgbox.Text;
-            //msg.Body = "Wishes you all NORDEX Management Trainees multiple cc:)";
+
             string mailbody = "";
             for (int r = 0; r < (dataGridView1.RowCount - 1); r++)
             {
@@ -356,7 +463,7 @@ namespace Ann_Birthday
                 if (!string.IsNullOrEmpty(ccaddr))//cc account
                 {
                     msg.CC.Add(new MailAddress(ccaddr));
-                    //msg.To.Add//cc account
+                  
                 }
             }
             foreach(string filename in openFileDialog1.FileNames)
@@ -481,7 +588,7 @@ namespace Ann_Birthday
 
                     //Attachment
                     String attachmentDisplayName = "MyAttachment";
-                    string imageSrc = "";
+                    string imageSrc = @"C:\Users\KumarSu\OneDrive - Nordex SE\Pictures\birthday-wish.jpg";
                     foreach (string filename in openFileDialog1.FileNames)
                     {
                         if (File.Exists(filename))
@@ -755,7 +862,7 @@ namespace Ann_Birthday
 
                     //dv.RowFilter = txtSearch.Text;
                     String date = comboBox2.Text;
-                    dv.RowFilter = "Birthday like'" + date + "%'";
+                    dv.RowFilter = "DOB like'" + date + "%'";
                     if (((dataGridView1.RowCount) - 1) > 0)
                     {
                         label12.Text = $"Total Records :{(dataGridView1.RowCount) - 1}";
@@ -828,20 +935,20 @@ namespace Ann_Birthday
             string date = comboBox2.Text;
             int d = Int32.Parse(date);
             DataTable dt = new DataTable();
-            dt.Columns.Add("s.no");
-            dt.Columns.Add("name");
-            dt.Columns.Add("department");
-            dt.Columns.Add("Birthday");
+            dt.Columns.Add("S.No");
+            dt.Columns.Add("Name of Employee");
+            dt.Columns.Add("Department");
+            dt.Columns.Add("Born Date");
             for (int j=0 ;j < (dataGridView1.RowCount-1);j++)
              { 
                  DataRow dr = dt.NewRow();
-                dr["s.no"] = j+1;
-                dr["name"] = dataGridView1.Rows[j].Cells[3].Value.ToString();
-                dr["department"] = dataGridView1.Rows[j].Cells[4].Value.ToString();
+                dr["S.No"] = j+1;
+                dr["Name of Employee"] = dataGridView1.Rows[j].Cells[3].Value.ToString();
+                dr["Department"] = dataGridView1.Rows[j].Cells[4].Value.ToString();
                 string day = dataGridView1.Rows[j].Cells[0].Value.ToString().Substring(3, 5).Substring(0, 2);
                 //(Month)d
                 Enum month = (Month)d;
-                dr["Birthday"] = month.ToString().Substring(0,3) +", " + day;
+                dr["Born Date"] = month.ToString().Substring(0,3) +", " + day;
                 dt.Rows.Add(dr);
              }
 

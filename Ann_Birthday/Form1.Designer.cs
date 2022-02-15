@@ -73,6 +73,7 @@ namespace Ann_Birthday
             this.label16 = new System.Windows.Forms.Label();
             this.form1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -673,6 +674,7 @@ namespace Ann_Birthday
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ComboBox bodycontent_cb;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.ColorDialog colorDialog1;
     }
 }
 
