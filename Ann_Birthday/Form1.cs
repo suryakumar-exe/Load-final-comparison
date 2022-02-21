@@ -27,7 +27,13 @@ namespace Ann_Birthday
         SmtpClient client;
         MailMessage msg;
         String file_name= @"D:\AGILE AND SCURM TRAINING\birthday_anniversary.xlsx";
-        
+
+        string Anni_imageSrc = "";
+
+
+
+        string imageSrc = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -70,9 +76,7 @@ namespace Ann_Birthday
                                 int i = 0;
                                 foreach (IXLCell cell in row.Cells())
                                     dt.Rows[dt.Rows.Count - 1][i++] = cell.Value.ToString();
-                                
-
-                            }
+                                  }
                         }
                         
                         dataGridView1.DataSource = dt.DefaultView;
@@ -287,6 +291,53 @@ namespace Ann_Birthday
         {
 
            
+            this.Location = new Point(0, 0);
+            this.Size = Screen.PrimaryScreen.WorkingArea.Size;
+            label14.BackColor = System.Drawing.Color.Transparent;
+            label10.BackColor = System.Drawing.Color.Transparent;
+            linkLabel1.BackColor = System.Drawing.Color.Transparent;
+            label1.BackColor = System.Drawing.Color.Transparent;
+            label16.BackColor = System.Drawing.Color.Transparent;
+            label15.BackColor = System.Drawing.Color.Transparent;
+            label13.BackColor = System.Drawing.Color.Transparent;
+            label3.BackColor = System.Drawing.Color.Transparent;
+            label5.BackColor = System.Drawing.Color.Transparent;
+            label7.BackColor = System.Drawing.Color.Transparent;
+            label11.Visible = true;
+            var Font_Arr = new List<string>();
+            Font_Arr.Add("Garamond");
+            Font_Arr.Add("Monaco");
+            Font_Arr.Add("cursive");
+            Font_Arr.Add("Courier");
+            Font_Arr.Add("Times");
+            var Color_Arr = new List<string>();
+            Color_Arr.Add("darkviolet");
+            Color_Arr.Add("black");
+            Color_Arr.Add("dodgerblue");
+            Color_Arr.Add("orangered");
+            Color_Arr.Add("darkslategray");
+            var Content_Arr = new List<string>();
+            Content_Arr.Add("Content 1");
+            Content_Arr.Add("Content 2");
+            Content_Arr.Add("Content 3");
+
+         
+
+            DateTime dtime = DateTime.Now;
+            int present_month = dtime.Month;
+            if(present_month<10)
+            {
+                comboBox2.SelectedItem = "0"+present_month.ToString();
+            }
+            else
+            {
+                comboBox2.SelectedItem = present_month.ToString();
+            }
+
+
+
+            
+
 
             Excel.Application xlApp = new Excel.Application();
             Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@"D:\AGILE AND SCURM TRAINING\birthday_anniversary.xlsx");
@@ -300,6 +351,7 @@ namespace Ann_Birthday
             string system_date = sub_date.Substring(0, 5);
             int birthday_count = 0;
             int aniver_count = 0;
+           
             foreach (Excel.Range row in xlRange.SpecialCells(Excel.XlCellType.xlCellTypeVisible).Rows)
             {
 
@@ -347,23 +399,9 @@ namespace Ann_Birthday
             popup.Popup();
 
 
-            label11.Text = @"C:\Users\KumarSu\OneDrive - Nordex SE\Pictures\birthday-wish.jpg";
-            this.Location = new Point(0, 0);
-            this.Size = Screen.PrimaryScreen.WorkingArea.Size;
-            label14.BackColor = System.Drawing.Color.Transparent;
-            label10.BackColor = System.Drawing.Color.Transparent;
-            linkLabel1.BackColor = System.Drawing.Color.Transparent;
-            label1.BackColor = System.Drawing.Color.Transparent;
-            label16.BackColor = System.Drawing.Color.Transparent;
-            label15.BackColor = System.Drawing.Color.Transparent;
-            label13.BackColor = System.Drawing.Color.Transparent;
-            label3.BackColor = System.Drawing.Color.Transparent;
-            label5.BackColor = System.Drawing.Color.Transparent;
-            label7.BackColor = System.Drawing.Color.Transparent;
-            comboBox_Font.SelectedItem = "Monaco";
-            comboBox_color.SelectedItem = "black";
-            bodycontent_cb.SelectedItem = "Content 1";
-            comboBox2.SelectedItem = "01";
+          
+
+
             Cursor.Current = Cursors.WaitCursor;
             DataTable dt = new DataTable();
 
@@ -396,23 +434,75 @@ namespace Ann_Birthday
                 Cursor.Current = Cursors.Default;
 
             }
-            
 
 
-            if(birthday_count>=1 || aniver_count >= 1)
+            for(int i = 0; i < 2; i++)
             {
-                DialogResult dialogResult = MessageBox.Show("You Want to send Wishes?", "Conformation", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
+                if (i == 0)
                 {
-                    btnSearch.PerformClick();
-                    button2.PerformClick();
-                    this.Close();
+                    if (birthday_count > 0)
+                    {
+
+                        Random rnd = new Random();
+                        int font = rnd.Next(0, 5);
+                        comboBox_Font.SelectedItem = Font_Arr[font];
+
+                        int color = rnd.Next(0, 5);
+                        comboBox_color.SelectedItem = Color_Arr[color];
+
+                        int content = rnd.Next(0, 3);
+                        bodycontent_cb.SelectedItem = Content_Arr[content];
+
+                        Random r = new Random();
+                        int birth_image = r.Next(0, 3);
+                        var Birth_Arr = new List<string>();
+                        string ad = @"D:\AGILE AND SCURM TRAINING\Birthday Images\1 birthday.jpg";
+                        imageSrc = ad;
+                        Birth_Arr.Add(ad);
+                        string ad1 = @"D:\AGILE AND SCURM TRAINING\Birthday Images\2 birthday.jpg";
+                        imageSrc = ad1;
+                        Birth_Arr.Add(ad1);
+                        string ad3= @"D:\AGILE AND SCURM TRAINING\Birthday Images\3 birthday.jpg";
+                        imageSrc = ad3;
+                        Birth_Arr.Add(ad3);
+                        label11.Text =Birth_Arr[birth_image];
+                        btnSearch.PerformClick();
+                        button2.PerformClick();
+                
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (aniver_count > 0)
+                    {
+                        Random rnd = new Random();
+                        int font = rnd.Next(0, 5);
+                        comboBox_Font.SelectedItem = Font_Arr[font];
+
+                        int color = rnd.Next(0, 5);
+                        comboBox_color.SelectedItem = Color_Arr[color];
+
+                        int content = rnd.Next(0, 3);
+                        bodycontent_cb.SelectedItem = Content_Arr[content];
+
+                        label11.Text = Anni_imageSrc;
+                        comboBox1.Text = "Anniversaryday";
+                        btnSearch.PerformClick();
+                        button2.PerformClick();
+                        this.Close();
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
                 }
             }
-            else
-            {
-                MessageBox.Show("No Wishes Today");
-            }
+
+
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -441,8 +531,8 @@ namespace Ann_Birthday
             for (int r = 0; r < (dataGridView1.RowCount - 1); r++)
             {
              
-                String name = Convert.ToString(dataGridView1.Rows[r].Cells["name"].Value);
-                String dep = Convert.ToString(dataGridView1.Rows[r].Cells["department"].Value);
+                String name = Convert.ToString(dataGridView1.Rows[r].Cells["Name"].Value);
+                String dep = Convert.ToString(dataGridView1.Rows[r].Cells["Department"].Value);
                 mailbody += name +"-"+ dep + "<br>";
             }
             msg.Body = mailbody;
@@ -453,13 +543,13 @@ namespace Ann_Birthday
             msg.Priority = MailPriority.Normal;
             for (int r = 0; r < (dataGridView1.RowCount - 1); r++)
             {
-                String addr = Convert.ToString(dataGridView1.Rows[r].Cells["email"].Value);
+                String addr = Convert.ToString(dataGridView1.Rows[r].Cells["Mail"].Value);
                 //MessageBox.Show(addr);
                 msg.To.Add(new MailAddress(addr));
             }
             for (int r = 0; r < (dataGridView2.RowCount - 1); r++)
             {
-                String ccaddr = Convert.ToString(dataGridView2.Rows[r].Cells["email"].Value);
+                String ccaddr = Convert.ToString(dataGridView2.Rows[r].Cells["Mail"].Value);
                 if (!string.IsNullOrEmpty(ccaddr))//cc account
                 {
                     msg.CC.Add(new MailAddress(ccaddr));
@@ -562,8 +652,8 @@ namespace Ann_Birthday
                     for (int r = 0; r < (dataGridView1.RowCount - 1); r++)
                     {
 
-                        String name = Convert.ToString(dataGridView1.Rows[r].Cells["name"].Value);
-                        String dep = Convert.ToString(dataGridView1.Rows[r].Cells["department"].Value);
+                        String name = Convert.ToString(dataGridView1.Rows[r].Cells["Name"].Value);
+                        String dep = Convert.ToString(dataGridView1.Rows[r].Cells["Department"].Value);
                         mailbody += (r + 1) + "." + name + " - " + dep+"<br>";
                     }
                     //mail.Body = mailbody;
@@ -571,7 +661,7 @@ namespace Ann_Birthday
                     Outlook.Recipients oRecips = mail.Recipients;
                     for (int r = 0; r < (dataGridView1.RowCount - 1); r++)
                     {
-                        String addr = Convert.ToString(dataGridView1.Rows[r].Cells["email"].Value);
+                        String addr = Convert.ToString(dataGridView1.Rows[r].Cells["Mail"].Value);
                         Outlook.Recipient oRecip = oRecips.Add(addr);
                         oRecip.Resolve();
                     }
@@ -580,7 +670,7 @@ namespace Ann_Birthday
                     //cc
                     for (int r = 0; r < (dataGridView2.RowCount - 1); r++)
                     {
-                        String ccaddr = Convert.ToString(dataGridView2.Rows[r].Cells["email"].Value);
+                        String ccaddr = Convert.ToString(dataGridView2.Rows[r].Cells["Mail"].Value);
                         Outlook.Recipient recipCc = mail.Recipients.Add(ccaddr);
                         recipCc.Type = (int)Outlook.OlMailRecipientType.olCC;
 
@@ -588,7 +678,7 @@ namespace Ann_Birthday
 
                     //Attachment
                     String attachmentDisplayName = "MyAttachment";
-                    string imageSrc = @"C:\Users\KumarSu\OneDrive - Nordex SE\Pictures\birthday-wish.jpg";
+
                     foreach (string filename in openFileDialog1.FileNames)
                     {
                         if (File.Exists(filename))
@@ -613,7 +703,7 @@ namespace Ann_Birthday
                   "<h2 style='font-family:"+font+ "; font-size: 20px;color:"+color+";  '>Greetings! </h2>" +
                   "<br>" +
                   "<h2 style='font-family: " + font+ ";font-size: 20px;color:"+color+ ";'>{0}</h2>" +
-                  "<br>" +
+                  "<br>"+
                   "<h2 style='font-family: " + font + ";'>{1}</h2> " +
                   "<br>" +
                   "<img src=\"cid:{2}\"><br><h1 style='font-family:" + font+ "; font-size: 20px;color:"+color+"'>{3}</h1>" +
@@ -622,8 +712,8 @@ namespace Ann_Birthday
                    
                     mail.Importance = Outlook.OlImportance.olImportanceNormal;
                     mail.Send();
-
-                    MessageBox.Show("Message sended successfully", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    label17.Text = "Birthday Wishes Sended Successfully";
+                    //MessageBox.Show("Message sended successfully", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
@@ -643,9 +733,33 @@ namespace Ann_Birthday
                     for (int r = 0; r < (dataGridView1.RowCount - 1); r++)
                     {
 
-                        String name = Convert.ToString(dataGridView1.Rows[r].Cells["name"].Value);
-                        String dep = Convert.ToString(dataGridView1.Rows[r].Cells["department"].Value);
-                        string exp = Convert.ToString(dataGridView1.Rows[r].Cells["experience"].Value);
+                        String name = Convert.ToString(dataGridView1.Rows[r].Cells["Name"].Value);
+                        String dep = Convert.ToString(dataGridView1.Rows[r].Cells["Department"].Value);
+                        string exp = Convert.ToString(dataGridView1.Rows[r].Cells["Experience"].Value);
+                        if(exp == "1")
+                        {
+                            Anni_imageSrc = @"D:\AGILE AND SCURM TRAINING\Anniversary Images\1st year Anniversary.jpg";
+                        }
+                        else if (exp == "2")
+                        {
+                            Anni_imageSrc = @"D:\AGILE AND SCURM TRAINING\Anniversary Images\2nd year Anniversary.jpg";
+                        }
+                        else if (exp == "3")
+                        {
+                            Anni_imageSrc = @"D:\AGILE AND SCURM TRAINING\Anniversary Images\3rd year Anniversary.jpg";
+                        }
+                        else if (exp == "4")
+                        {
+                            Anni_imageSrc = @"D:\AGILE AND SCURM TRAINING\Anniversary Images\4th year Anniversary.jpg";
+                        }
+                        else if (exp == "5")
+                        {
+                            Anni_imageSrc = @"D:\AGILE AND SCURM TRAINING\Anniversary Images\5th year Anniversary.jpg";
+                        }
+                        else
+                        {
+                            Anni_imageSrc = @"D:\AGILE AND SCURM TRAINING\Anniversary Images\default Anniversary.jpg";
+                        }
                         if (exp == "1")
                         {
                             mailbody += (r + 1) + ". " + name + " - " + dep + " - " + exp + "st year Anniversary" + "<br>";
@@ -667,7 +781,7 @@ namespace Ann_Birthday
                     Outlook.Recipients oRecips = mail.Recipients;
                     for (int r = 0; r < (dataGridView1.RowCount - 1); r++)
                     {
-                        String addr = Convert.ToString(dataGridView1.Rows[r].Cells["email"].Value);
+                        String addr = Convert.ToString(dataGridView1.Rows[r].Cells["Mail"].Value);
                         Outlook.Recipient oRecip = oRecips.Add(addr);
                         oRecip.Resolve();
                     }
@@ -676,7 +790,7 @@ namespace Ann_Birthday
 
                     for (int r = 0; r < (dataGridView2.RowCount - 1); r++)
                     {
-                        String ccaddr = Convert.ToString(dataGridView2.Rows[r].Cells["email"].Value);
+                        String ccaddr = Convert.ToString(dataGridView2.Rows[r].Cells["Mail"].Value);
                         Outlook.Recipient recipCc = mail.Recipients.Add(ccaddr);
                         recipCc.Type = (int)Outlook.OlMailRecipientType.olCC;
 
@@ -684,15 +798,16 @@ namespace Ann_Birthday
 
                     //Attachment
                     String attachmentDisplayName = "MyAttachment";
-                    string imageSrc = "";
+
+                    
                     foreach (string filename in openFileDialog1.FileNames)
                     {
                         if (File.Exists(filename))
                         {
-                            imageSrc = filename;
+                            Anni_imageSrc = filename;
                         }
                     }
-                    Outlook.Attachment oAttach = mail.Attachments.Add(imageSrc, Outlook.OlAttachmentType.olByValue, null, attachmentDisplayName);
+                    Outlook.Attachment oAttach = mail.Attachments.Add(Anni_imageSrc, Outlook.OlAttachmentType.olByValue, null, attachmentDisplayName);
                     string imageContentid = "someimage.jpg";
                     oAttach.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001E", imageContentid);
                     String wishes_header = richTextBox1.Text;
@@ -718,8 +833,8 @@ namespace Ann_Birthday
 
                     mail.Importance = Outlook.OlImportance.olImportanceNormal;
                     mail.Send();
-
-                    MessageBox.Show("Message sended successfully", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    label17.Text = "Aniiversary Day Wishes Sended Successfully";
+                    //MessageBox.Show("Message sended successfully", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
@@ -998,24 +1113,49 @@ namespace Ann_Birthday
 
         private void bodycontent_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(bodycontent_cb.SelectedItem.ToString() == "Content 1")
+            if(comboBox1.Text == "Birthday")
             {
-                msgbox.Text = "HAPPY BIRTHDAY";
-                richTextBox1.Text = "May this happy day in your life be the beginning of a year filled  with joy, good health and great success. Enjoy it to the fullest because today is your day. ";
-                richTextBox2.Text = "Happy Birthday & have a great year ahead!";
+                if (bodycontent_cb.SelectedItem.ToString() == "Content 1")
+                {
+                    msgbox.Text = "HAPPY BIRTHDAY";
+                    richTextBox1.Text = "May this happy day in your life be the beginning of a year filled  with joy, good health and great success. Enjoy it to the fullest because today is your day. ";
+                    richTextBox2.Text = "Happy Birthday & have a great year ahead!";
+                }
+                else if (bodycontent_cb.SelectedItem.ToString() == "Content 2")
+                {
+                    msgbox.Text = "HAPPY BIRTHDAY";
+                    richTextBox1.Text = "May this happy dayMay the coming year of your life bring loads of happiness and wonderful memories to cherish. Warm greetings on your birthday! ";
+                    richTextBox2.Text = "Happy Birthday & have a great year ahead!";
+                }
+                else if (bodycontent_cb.SelectedItem.ToString() == "Content 3")
+                {
+                    msgbox.Text = "HAPPY BIRTHDAY";
+                    richTextBox1.Text = "Here's wishing a very Happy Birthday to a wonderful colleague and a great friend! May God bless you with health, success and happiness!";
+                    richTextBox2.Text = "Happy Birthday & have a great year ahead!";
+                }
             }
-            else if (bodycontent_cb.SelectedItem.ToString() == "Content 2")
+            else
             {
-                msgbox.Text = "HAPPY BIRTHDAY";
-                richTextBox1.Text = "May this happy dayMay the coming year of your life bring loads of happiness and wonderful memories to cherish. Warm greetings on your birthday! ";
-                richTextBox2.Text = "Happy Birthday & have a great year ahead!";
+                if (bodycontent_cb.SelectedItem.ToString() == "Content 1")
+                {
+                    msgbox.Text = "HAPPY ANNIVERSARY 1";
+                    richTextBox1.Text = "May this happy day in your life be the beginning of a year filled  with joy, good health and great success. Enjoy it to the fullest because today is your day. ";
+                    richTextBox2.Text = "Happy Birthday & have a great year ahead!";
+                }
+                else if (bodycontent_cb.SelectedItem.ToString() == "Content 2")
+                {
+                    msgbox.Text = "HAPPY ANNIVERSARY 2";
+                    richTextBox1.Text = "May this happy dayMay the coming year of your life bring loads of happiness and wonderful memories to cherish. Warm greetings on your birthday! ";
+                    richTextBox2.Text = "Happy Birthday & have a great year ahead!";
+                }
+                else if (bodycontent_cb.SelectedItem.ToString() == "Content 3")
+                {
+                    msgbox.Text = "HAPPY ANNIVERSARY 3";
+                    richTextBox1.Text = "Here's wishing a very Happy Birthday to a wonderful colleague and a great friend! May God bless you with health, success and happiness!";
+                    richTextBox2.Text = "Happy Birthday & have a great year ahead!";
+                }
             }
-            else if(bodycontent_cb.SelectedItem.ToString() == "Content 3")
-            {
-                msgbox.Text = "HAPPY BIRTHDAY";
-                richTextBox1.Text = "Here's wishing a very Happy Birthday to a wonderful colleague and a great friend! May God bless you with health, success and happiness!";
-                richTextBox2.Text = "Happy Birthday & have a great year ahead!";
-            }
+            
         }
     }
 }

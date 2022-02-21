@@ -71,9 +71,10 @@ namespace Ann_Birthday
             this.comboBox_color = new System.Windows.Forms.ComboBox();
             this.bodycontent_cb = new System.Windows.Forms.ComboBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.form1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.label17 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
@@ -568,12 +569,22 @@ namespace Ann_Birthday
             this.programBindingSource.DataSource = typeof(Ann_Birthday.Program);
             this.programBindingSource.CurrentChanged += new System.EventHandler(this.programBindingSource_CurrentChanged);
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(509, 632);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(53, 20);
+            this.label17.TabIndex = 46;
+            this.label17.Text = "label17";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(1370, 663);
+            this.Controls.Add(this.label17);
             this.Controls.Add(this.bodycontent_cb);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.comboBox_color);
@@ -675,6 +686,7 @@ namespace Ann_Birthday
         private System.Windows.Forms.ComboBox bodycontent_cb;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Label label17;
     }
 }
 
